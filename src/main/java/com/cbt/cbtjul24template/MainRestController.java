@@ -18,15 +18,23 @@ public class MainRestController
     @PostMapping("update/user/details")
     public ResponseEntity<Userdetail> updateUserDetails(@RequestBody Userdetail userdetail)
     {
-        userdetailRepository.updateFnameAndLnameAndEmailAndPhoneAndCityAndCountryByUsername(
-                userdetail.getFname(),
-                userdetail.getLname(),
-                userdetail.getEmail(),
-                userdetail.getPhone(),
-                userdetail.getCity(),
-                userdetail.getCountry(),
-                userdetail.getUsername()
-        );
+        if(userdetailRepository.findById(userdetail.getUsername()).isPresent())
+        {
+            userdetailRepository.updateFnameAndLnameAndEmailAndPhoneAndCityAndCountryByUsername(
+                    userdetail.getFname(),
+                    userdetail.getLname(),
+                    userdetail.getEmail(),
+                    userdetail.getPhone(),
+                    userdetail.getCity(),
+                    userdetail.getCountry(),
+                    userdetail.getUsername()
+            );
+        }
+        else
+        {
+            userdetailRepository.save(userdetail);
+        }
+
 
         return ResponseEntity.ok().body(userdetail);
     }

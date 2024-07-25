@@ -68,12 +68,13 @@
 <script>
     // Replace with actual user data
     const userData = {
-        firstName: 'Justin',
-        lastName: 'Doe',
+        fname: 'John',
+        lname: 'Doe',
         phone: '+1 234 567 890',
         email: 'john.doe@example.com',
         city: 'New York',
-        country: 'USA'
+        country: 'USA',
+        username: 'dummyuser'
     };
 
     // Populate user data in the HTML
@@ -90,20 +91,52 @@
         event.preventDefault(); // Prevent form submission
 
         // Update user data with form values
-        userData.firstName = document.getElementById('firstNameInput').value;
-        userData.lastName = document.getElementById('lastNameInput').value;
+        userData.fname = document.getElementById('firstNameInput').value;
+        userData.lname = document.getElementById('lastNameInput').value;
         userData.phone = document.getElementById('phoneInput').value;
         userData.email = document.getElementById('emailInput').value;
         userData.city = document.getElementById('cityInput').value;
         userData.country = document.getElementById('countryInput').value;
+        userData.username = document.getElementById('username').value;
+
+        const url = '/api/v1/update/user/details'; // Replace with your backend URL
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Request successful
+                    console.log('Data sent successfully');
+                    // Handle successful response from the backend
+                    const response = JSON.parse(xhr.responseText);
+                    // Do something with the response data
+                    console.log(response);
+                } else {
+                    // Request failed
+                    console.error('Error sending data');
+                    // Handle error response from the backend
+                    const error = JSON.parse(xhr.responseText);
+                    console.error(error);
+                }
+            }
+        };
+
+
+        xhr.send(JSON.stringify(userData));
+
 
         // Update the displayed user data
-        document.getElementById('firstName').textContent = userData.firstName;
-        document.getElementById('lastName').textContent = userData.lastName;
+        document.getElementById('firstName').textContent = userData.fname;
+        document.getElementById('lastName').textContent = userData.lname;
         document.getElementById('phone').textContent = userData.phone;
         document.getElementById('email').textContent = userData.email;
         document.getElementById('city').textContent = userData.city;
         document.getElementById('country').textContent = userData.country;
+
+
 
         // Clear form inputs
         form.reset();
